@@ -12,7 +12,7 @@ function parseCommmand (command: string, number: number) {
     } else if (command == "sM") {
         DS3231.dateTime(
         DS3231.year(),
-        2,
+        number,
         DS3231.date(),
         DS3231.day(),
         DS3231.hour(),
