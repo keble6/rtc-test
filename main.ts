@@ -50,7 +50,7 @@ function parseCommmand (command: string, data: string) {
         0
         )
     } else if (command == "dt") {
-        serial.writeLine("" + DS3231.date() + "/" + DS3231.month() + "/" + DS3231.year() + "" + DS3231.hour() + ":" + DS3231.minute())
+        serial.writeLine("" + DS3231.date() + "/" + DS3231.month() + "/" + DS3231.year() + "  " + DS3231.hour() + ":" + DS3231.minute() + ":" + DS3231.second())
     } else {
         serial.writeLine("Invalid command")
     }
