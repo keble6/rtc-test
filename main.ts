@@ -1,7 +1,7 @@
-function parseCommmand (string: string) {
-    if (string == "sY") {
+function parseCommmand (command: string, data: string) {
+    if (command == "sY") {
         DS3231.dateTime(
-        parseFloat(string),
+        parseFloat(data),
         DS3231.month(),
         DS3231.date(),
         DS3231.day(),
@@ -9,58 +9,60 @@ function parseCommmand (string: string) {
         DS3231.minute(),
         0
         )
-    } else if (string == "sM") {
+    } else if (command == "sM") {
         DS3231.dateTime(
         DS3231.year(),
-        parseFloat(string),
+        parseFloat(data),
         DS3231.date(),
         DS3231.day(),
         DS3231.hour(),
         DS3231.minute(),
         0
         )
-    } else if (string == "sD") {
+    } else if (command == "sD") {
         DS3231.dateTime(
         DS3231.year(),
         DS3231.month(),
-        parseFloat(string),
+        parseFloat(data),
         DS3231.day(),
         DS3231.hour(),
         DS3231.minute(),
         0
         )
-    } else if (string == "sh") {
+    } else if (command == "sh") {
         DS3231.dateTime(
         DS3231.year(),
         DS3231.month(),
         DS3231.date(),
         DS3231.day(),
-        parseFloat(string),
+        parseFloat(data),
         DS3231.minute(),
         0
         )
-    } else if (string == "sm") {
+    } else if (command == "sm") {
         DS3231.dateTime(
         DS3231.year(),
         DS3231.month(),
         DS3231.date(),
         DS3231.day(),
         0,
-        parseFloat(string),
+        parseFloat(data),
         0
         )
-    } else if (string == "dt") {
+    } else if (command == "dt") {
         serial.writeLine("" + DS3231.date() + "/" + DS3231.month() + "/" + DS3231.year() + "" + DS3231.hour() + ":" + DS3231.minute())
     } else {
         serial.writeLine("Invalid command")
     }
 }
+let data = ""
 let stringIn = ""
 let command = ""
 basic.forever(function () {
     stringIn = serial.readUntil(serial.delimiters(Delimiters.NewLine))
     if (stringIn.length >= 2) {
         command = stringIn.substr(0, 2)
-        parseCommmand(command)
+        data = stringIn.substr(2, stringIn.length - 2)
+        parseCommmand(command, "abc")
     }
 })
