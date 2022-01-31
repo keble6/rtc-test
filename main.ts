@@ -1,7 +1,7 @@
-function parseCommmand (command: string, data: string) {
+function parseCommmand (command: string, number: number) {
     if (command == "sY") {
         DS3231.dateTime(
-        parseFloat(data),
+        number,
         DS3231.month(),
         DS3231.date(),
         DS3231.day(),
@@ -12,7 +12,7 @@ function parseCommmand (command: string, data: string) {
     } else if (command == "sM") {
         DS3231.dateTime(
         DS3231.year(),
-        parseFloat(data),
+        2,
         DS3231.date(),
         DS3231.day(),
         DS3231.hour(),
@@ -23,7 +23,7 @@ function parseCommmand (command: string, data: string) {
         DS3231.dateTime(
         DS3231.year(),
         DS3231.month(),
-        parseFloat(data),
+        number,
         DS3231.day(),
         DS3231.hour(),
         DS3231.minute(),
@@ -35,7 +35,7 @@ function parseCommmand (command: string, data: string) {
         DS3231.month(),
         DS3231.date(),
         DS3231.day(),
-        parseFloat(data),
+        number,
         DS3231.minute(),
         0
         )
@@ -46,23 +46,32 @@ function parseCommmand (command: string, data: string) {
         DS3231.date(),
         DS3231.day(),
         0,
-        parseFloat(data),
+        number,
         0
         )
     } else if (command == "dt") {
-        serial.writeLine("" + DS3231.date() + "/" + DS3231.month() + "/" + DS3231.year() + "  " + DS3231.hour() + ":" + DS3231.minute() + ":" + DS3231.second())
+        serial.writeLine("" + leadingZero(DS3231.date()) + "/" + leadingZero(DS3231.month()) + "/" + DS3231.year() + "  " + leadingZero(DS3231.hour()) + ":" + leadingZero(DS3231.minute()) + ":" + leadingZero(DS3231.second()))
     } else {
         serial.writeLine("Invalid command")
     }
 }
-let data = ""
+function leadingZero (num: number) {
+    if (num < 10) {
+        return "0" + num
+    } else {
+        return convertToText(num)
+    }
+}
+let dataNumber = 0
+let dataString = ""
 let stringIn = ""
 let command = ""
 basic.forever(function () {
     stringIn = serial.readUntil(serial.delimiters(Delimiters.NewLine))
     if (stringIn.length >= 2) {
         command = stringIn.substr(0, 2)
-        data = stringIn.substr(2, stringIn.length - 2)
-        parseCommmand(command, "abc")
+        dataString = stringIn.substr(2, stringIn.length - 2)
+        dataNumber = parseFloat(dataString)
+        parseCommmand(command, dataNumber)
     }
 })
